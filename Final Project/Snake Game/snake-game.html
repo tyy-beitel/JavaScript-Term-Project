@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8">
+    <title>Snake Game</title>
+    <link rel = "stylesheet" href = "css/snake-game.css">
+</head>
+<nav id = "read-me">
+    <ul>
+        <li><a href = "readme.txt">README</a></li>
+    </ul>
+</nav>
+<canvas id = "sg" width = "400" height = "400"></canvas>
+<script>
+window.onload = function() {
+    canv = document.getElementById("sg");
+    ctx = canv.getContext("2d");
+    document.addEventListener("keydown", keyPush);
+    setInterval(game, 1000/15);
+}
+px = py = 10;
+gs = tc = 20;
+ax = ay = 15;
+xv = yv = 0;
+movement = [];
+end = 5;
+function game() {
+    px += xv;
+    py += yv;
+    if(px < 0) {
+        px = tc - 1;
+    }
+    if(px > tc - 1) {
+        px = 0;
+    }
+    if(py < 0) {
+        py = tc - 1;
+    }
+    if(py > tc - 1) {
+        py = 0;
+    }
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canv.width, canv.height);
+
+    ctx.fillStyle = "green";
+    for(var i = 0; i < movement.length; i++) {
+        ctx.fillRect(movement[i].x * gs, movement[i].y * gs, gs - 2, gs - 2);
+        if(movement[i].x == px && movement[i].y == py) {
+            end = 5;
+        }
+    }
+    movement.push({x:px, y:py});
+    while(movement.length > end) {
+        movement.shift();
+    }
+    if(ax == px && ay == py) {
+            end++;
+            ax = Math.floor(Math.random() * tc);
+            ay = Math.floor(Math.random() * tc);
+    }
+    ctx.fillStyle = "red";
+    ctx.fillRect(ax * gs, ay * gs, gs - 2, gs - 2);
+}   
+function keyPush(evt) {
+    switch(evt.keyCode) {
+        case 37:
+            xv = -1; yv = 0;
+            break;
+        case 38:
+            xv = 0; yv = -1;
+            break;
+        case 39:
+            xv = 1; yv = 0;
+            break;
+        case 40:
+            xv = 0; yv = 1;
+            break;
+    }
+}
+</script>
+</html>
